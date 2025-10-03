@@ -1,150 +1,157 @@
 import {
-  Text,
   View,
-  TextInput,
-  TouchableOpacity,
+  Text,
   Image,
   FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
-import { useCart } from "../../context/CartContext";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import Header from "../../components/ui/Header";
+import BackGroundSvg from "../../components/icons/tabBar/BG";
+import { LinearGradient } from "expo-linear-gradient";
+import { useCallback, useState, useEffect } from "react";
+import ImageCarousel from "../../components/ui/ImageCarousal";
+import SkeuomorphicButton from "../../components/ui/SkeuomorphicButton";
 import GradientButton from "../../components/ui/GradientButton";
-import { router } from "expo-router";
-import AddIcon from "../../components/icons/AddIcon";
-import SubtractIcon from "../../components/icons/SubtractIcon";
+import AddToCartBottomContainer from "../../components/ui/AddToCartBottomContainer";
+import { useCart } from "../../context/CartContext";
 
-const Cart = () => {
-  const { items, updateQuantity, subtotal, deliveryFee, discount, total } =
-    useCart();
 
-  const renderItem = ({ item }: { item: typeof items[0] }) => (
-    <View className="flex-row items-center mb-5 pb-5 border-b border-gray-700">
-      {/* Product Image */}
-      <View className="w-[100px] h-[100px] bg-[#4A5568] rounded-3xl mr-4 items-center justify-center">
-        <Image
-          source={`../../assets/product_images${item.image}`}
-          width={100}
-          height={100}
-        />
-      </View>
-
-      {/* Product Info */}
-      <View className="flex-1">
-        <Text className="text-white text-lg mb-2 font-poppins-bold">
-          {item.name}
-        </Text>
-        <Text className="text-[#34C8E8] font-semibold text-lg">
-          ${" "}
-          {item.price.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-          })}
-        </Text>
-      </View>
-
-      {/* Quantity Controls */}
-      <View className="flex-row items-center gap-2 p-1">
-        <TouchableOpacity
-          onPress={() => updateQuantity(item.id, item.quantity - 1)}
-          className="w-10 h-10 bg-[#4A5568] rounded-lg items-center justify-center"
-        >
-          <SubtractIcon />
-        </TouchableOpacity>
-
-        <Text className="text-white font-poppins-semibold text-sm w-8 text-center">
-          {item.quantity}
-        </Text>
-
-        <GradientButton
-          size={35}
-          onPress={() => updateQuantity(item.id, item.quantity + 1)}
-          animated
-        >
-          <AddIcon />
-        </GradientButton>
-      </View>
-    </View>
+export default function ProductDetail() {
+  const router = useRouter();
+  const { id, name, imageUrl, price } = useLocalSearchParams();
+  const { addItem } = useCart();
+  const [activeTab, setActiveTab] = useState<"description" | "specification">(
+    "description"
   );
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const ListFooterComponent = () => (
-    <>
-      {/* Free Shipping Banner */}
-      <Text className="text-gray-400 text-center text-sm mb-6 mt-4">
-        Your cart qualifies for free shipping
-      </Text>
+  const images = [imageUrl, imageUrl, imageUrl];
 
-      {/* Promo Code */}
-      <View className="flex-row items-center gap-3 mb-8">
-        <View className="flex-1 bg-[#2D3748] rounded-2xl px-5 py-4">
-          <TextInput
-            placeholder="Bike30"
-            placeholderTextColor="#718096"
-            className="text-white text-base"
+  useEffect(() => {
+    if (activeTab === "specification") {
+      fetchProducts();
+    }
+  }, [activeTab]);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("https://fakestoreapi.com/products?limit=4");
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  return (
+    <View className="flex-1 bg-background">
+      <View className="absolute right-0 -top-10" pointerEvents="none">
+        <BackGroundSvg />
+      </View>
+      <View className="px-4">
+        <Header title={name} showBack onBackPress={() => router.back()} />
+      </View>
+      <View className="w-full flex-[.4]">
+        <ImageCarousel images={images} />
+      </View>
+
+      <View className="relative flex-[.6] rounded-t-[30px] bottom-0 bg-[#353F54] shadow-2xl border-2 border-[#3D4860]">
+        <LinearGradient
+          colors={["rgba(0,0,0,0.6)", "rgba(34,40,52,0.6)"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 100, y: 5 }}
+          className="absolute inset-0 rounded-t-[30px]"
+        />
+
+        <View className="flex flex-row justify-evenly mt-[30px] gap-[30px] p-4">
+          <SkeuomorphicButton
+            title="Description"
+            isActive={activeTab === "description"}
+            onPress={() => setActiveTab("description")}
+          />
+          <SkeuomorphicButton
+            title="Specification"
+            isActive={activeTab === "specification"}
+            onPress={() => setActiveTab("specification")}
           />
         </View>
 
-        <GradientButton
-          onPress={() => {}}
-          style={{ width: 120, height: 56 }}
-          animated
-        >
-          <Text className="text-white font-semibold text-base">Apply</Text>
-        </GradientButton>
+        {/* Tab Content */}
+        <View className="flex-1 mt-[30px] gap-4 px-4">
+          {activeTab === "description" ? (
+            <>
+              <Text className="font-poppins-bold text-white text-lg">{name}</Text>
+              <Text className="opacity-60 text-white text-[15px]">
+                The LR01 uses the same design as the most iconic bikes from PEUGEOT
+                Cycles' 130-year history and combines it with agile, dynamic
+                performance that's perfectly suited to navigating today's cities. As
+                well as a lugged steel frame and iconic PEUGEOT black-and-white
+                chequer design, this city bike also features a 16-speed Shimano
+                Claris drivetrain.
+              </Text>
+            </>
+          ) : (
+            <View className="flex-1">
+              <Text className="font-poppins-bold text-white text-lg mb-4">
+                Related Products
+              </Text>
+              {loading ? (
+                <ActivityIndicator size="large" color="#34C8E8" />
+              ) : (
+                <FlatList
+                  data={products}
+                  renderItem={renderProduct}
+                  keyExtractor={(item) => item.id.toString()}
+                  showsVerticalScrollIndicator={false}
+                />
+              )}
+            </View>
+          )}
+        </View>
+
+        <View className="bottom-0 w-full">
+          <View className="relative bottom-0">
+            <AddToCartBottomContainer />
+            <View className="absolute inset-0 -mt-5 flex-row items-center justify-between px-10">
+              <Text className="text-2xl text-[#3D9CEA] font-poppins-bold">
+                $ {price}
+              </Text>
+              <GradientButton
+                style={{
+                  paddingHorizontal: 40,
+                  paddingVertical: 14,
+                  borderRadius: 12,
+                  width: 160,
+                }}
+                animated={true}
+                onPress={() => {
+                  addItem({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: images[0],
+                  });
+                  setTimeout(() => {
+                    router.push({ pathname: "/MyCart/Cart" });
+                  }, 500);
+                }}
+              >
+                <Text className="text-white font-poppins-semibold text-base">
+                  Add to Cart
+                </Text>
+              </GradientButton>
+            </View>
+          </View>
+        </View>
       </View>
-
-      {/* Price Breakdown */}
-      <View className="mb-8">
-        <View className="flex-row justify-between mb-3">
-          <Text className="text-white text-base">Subtotal:</Text>
-          <Text className="text-white text-base font-medium">${subtotal}</Text>
-        </View>
-
-        <View className="flex-row justify-between mb-3">
-          <Text className="text-white text-base">Delivery Fee:</Text>
-          <Text className="text-white text-base font-medium">
-            ${deliveryFee}
-          </Text>
-        </View>
-
-        <View className="flex-row justify-between mb-4">
-          <Text className="text-white text-base">Discount:</Text>
-          <Text className="text-white text-base font-medium">
-            {(discount * 100).toFixed(0)}%
-          </Text>
-        </View>
-
-        <View className="flex-row justify-between items-center pt-4 border-t border-gray-700">
-          <Text className="text-white text-xl font-semibold">Total:</Text>
-          <Text className="text-[#34C8E8] text-2xl font-bold">${total}</Text>
-        </View>
-      </View>
-    </>
-  );
-
-  return (
-    <View className="bg-background flex-1">
-      <View className="px-2">
-        <Header
-          showBack
-          title="My Shopping Cart"
-          onBackPress={() => router.back()}
-        />
-        
-      </View>
-
-      <FlatList
-        data={items}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
-        showsVerticalScrollIndicator={false}
-        ListFooterComponent={ListFooterComponent}
-      />
-
-      {/* Checkout Button */}
-      <View className="px-5 pb-8"></View>
     </View>
   );
-};
-
-export default Cart;
+}

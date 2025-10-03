@@ -18,9 +18,7 @@ const SkeuomorphicButton: React.FC<SkeuomorphicButtonProps> = ({
 }) => {
   const [isDown, setDown] = useState(false);
 
-  const gradColors = isActive
-    ? ["#3CA4EB", "#4286EE"]
-    : ["rgba(255, 255, 255, 0.6)"];
+  const gradColors = isActive ? ["#3CA4EB", "#4286EE"] : ["#FFFFFF", "#FFFFFF"];
 
   const buttonFaceStyle = {
     borderRadius: size * 1.5,
@@ -54,8 +52,9 @@ const SkeuomorphicButton: React.FC<SkeuomorphicButtonProps> = ({
           ]}
         >
           <MaskedView
+            style={{ paddingVertical: 4 }} 
             maskElement={
-              <Text className="text-lg font-poppins-bold text-center text-white ">
+              <Text className="text-lg font-poppins-bold text-center">
                 {title}
               </Text>
             }

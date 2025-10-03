@@ -44,3 +44,11 @@ export interface CartContextType {
   deliveryFee: number;
   total: number;
 }
+
+export interface ProductAPI {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  category: string;
+}
