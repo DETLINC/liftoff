@@ -17,30 +17,26 @@
 
 2. **Install dependencies**
 
-```bash
-   npm install
+```bash   npm install
 
-3. Start the development server
+3. **Start the development server**
 
-```bash
-   npx expo start
+```bash   npx expo start
 
-4. **Run on your preferred platform**
+Run on your IOS device
 
 Press i for iOS Simulator
-Press a for Android Emulator
-Scan QR code with Expo Go app for physical device
 
 
+**Testing on Different Screen Sizes**
 
-Testing on Different Screen Sizes
+The app is responsive for:
 
 iPhone 13 mini (5.4")
 iPhone 17 Pro Max (6.9")
 
-To test different sizes in simulator, change device from Xcode or Android Studio.
 
-Tech Stack
+**Tech Stack**
 
 Framework: Expo React Native (SDK 52)
 Language: TypeScript
@@ -48,4 +44,46 @@ Styling: NativeWind (Tailwind CSS)
 Animations: React Native Reanimated 4
 Gestures: React Native Gesture Handler
 Routing: Expo Router
-Icons: Custom SVG components (converted from Figma)
+
+
+**Assumptions Made**
+1. **Navigation Flow**
+
+- Cart tab button navigates to "My Shopping Cart" screen (modal presentation)
+Used slide-from-bottom animation
+
+2. **Image Carousel**
+
+- Product images duplicated 3 times to demonstrate carousel:
+
+  ```const images = [imageUrl, imageUrl, imageUrl];
+
+3. **Styling Approach**
+
+- Primary: NativeWind (Tailwind CSS)
+- Fallback: Inline style prop for:
+
+Complex shadows (inner shadows)
+Animated styles (Reanimated)
+
+4. **Icons & Assets**
+
+- All Figma icons converted to SVG
+- Stored as reusable components in /components/icons
+
+5. **API Integration**
+
+- API: FakeStore API
+
+ ``` https://fakestoreapi.com/products?limit=10
+
+- Fetched in "Specification" tab
+- Custom hook useFetchProducts
+
+6. **State Management**
+
+- Cart uses React Context API
+- Includes: add, remove, update quantity, calculate totals
+- Context includes: add, remove, update quantity, calculate totals
+
+
