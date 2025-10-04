@@ -24,7 +24,7 @@ const BUTTON_HEIGHT = 44;
 const SWIPEABLE_SIZE = 36;
 const SWIPE_THRESHOLD = BUTTON_WIDTH / 2;
 
-const BUTTON_PADDING = 10;
+const BUTTON_PADDING = 12;
 const SWIPEABLE_DIMENSIONS = BUTTON_HEIGHT - 2.3 * BUTTON_PADDING;
 BUTTON_WIDTH - 1.7 * BUTTON_PADDING - SWIPEABLE_DIMENSIONS;
 
@@ -41,6 +41,12 @@ const SlideButtonTwo = ({ onComplete }: SlideButtonProps) => {
     console.log("Handled completed purchase!");
     setShowDone(true);
     onComplete?.();
+
+    // Reset after 1 second
+    setTimeout(() => {
+      buttonVal.value = withTiming(0, { duration: 200 });
+      setShowDone(false);
+    }, 1000);
   };
 
   const handleGesture = Gesture.Pan()
@@ -95,7 +101,7 @@ const SlideButtonTwo = ({ onComplete }: SlideButtonProps) => {
 
   return (
     <GestureHandlerRootView>
-      <View className="h-11 w-[174px] bg-[#2D3748] rounded-xl items-center justify-center">
+      <View className="h-[50px] w-[174px] bg-[#2D3748] rounded-xl items-center justify-center">
         <GestureDetector gesture={handleGesture}>
           <Animated.View
             className="absolute left-1 z-10 items-center justify-center"
