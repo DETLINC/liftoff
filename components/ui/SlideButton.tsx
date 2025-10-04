@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { GestureDetector } from "react-native-gesture-handler";
-import { View, Text } from "react-native";
+import {
+  GestureDetector,
+  GestureHandlerRootView,
+  PanGestureHandler,
+} from "react-native-gesture-handler";
+import { StyleSheet, SafeAreaView, View, Dimensions } from "react-native";
+
 import Animated, {
   Extrapolate,
   interpolate,
@@ -9,6 +14,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
 import { Gesture } from "react-native-gesture-handler";
 import ArrowRight from "../icons/ArrowRight";
 import GradientButton from "./GradientButton";
@@ -18,8 +24,17 @@ const BUTTON_HEIGHT = 44;
 const SWIPEABLE_SIZE = 36;
 const SWIPE_THRESHOLD = BUTTON_WIDTH / 2;
 
-const SlideButtonTwo = ({ onComplete }) => {
+const BUTTON_PADDING = 10;
+const SWIPEABLE_DIMENSIONS = BUTTON_HEIGHT - 2.3 * BUTTON_PADDING;
+BUTTON_WIDTH - 1.7 * BUTTON_PADDING - SWIPEABLE_DIMENSIONS;
+
+interface SlideButtonProps {
+  onComplete: () => void;
+}
+
+const SlideButtonTwo = ({ onComplete }: SlideButtonProps) => {
   const [showDone, setShowDone] = useState(false);
+
   const buttonVal = useSharedValue(0);
 
   const handleComplete = () => {
@@ -36,6 +51,7 @@ const SlideButtonTwo = ({ onComplete }) => {
       );
       buttonVal.value = clampedTranslation;
 
+      // Change text at halfway point
       if (clampedTranslation >= SWIPE_THRESHOLD && !showDone) {
         runOnJS(setShowDone)(true);
       } else if (clampedTranslation < SWIPE_THRESHOLD && showDone) {
@@ -78,32 +94,35 @@ const SlideButtonTwo = ({ onComplete }) => {
   }));
 
   return (
-    <View className="h-11 w-[174px] bg-[#2D3748] rounded-xl items-center justify-center">
-      <GestureDetector gesture={handleGesture}>
-        <Animated.View 
-          className="absolute left-1 z-10 items-center justify-center"
-          style={swipeableStyle}
+    <GestureHandlerRootView>
+      <View className="h-11 w-[174px] bg-[#2D3748] rounded-xl items-center justify-center">
+        <GestureDetector gesture={handleGesture}>
+          <Animated.View
+            className="absolute left-1 z-10 items-center justify-center"
+            style={swipeableStyle}
+          >
+            {/* <ArrowRight /> */}
+            <GradientButton>
+              <ArrowRight />
+            </GradientButton>
+          </Animated.View>
+        </GestureDetector>
+
+        <Animated.Text
+          className="text-white font-poppins-medium opacity-60 text-base absolute z-[1]"
+          style={checkoutTextStyle}
         >
-          <GradientButton size={36}>
-            <ArrowRight />
-          </GradientButton>
-        </Animated.View>
-      </GestureDetector>
+          Checkout
+        </Animated.Text>
 
-      <Animated.Text 
-        className="text-white font-semibold text-base absolute z-[1]"
-        style={checkoutTextStyle}
-      >
-        Checkout
-      </Animated.Text>
-
-      <Animated.Text 
-        className="text-white font-semibold text-base absolute z-[1]"
-        style={[{ opacity: 0 }, doneTextStyle]}
-      >
-        Done!
-      </Animated.Text>
-    </View>
+        <Animated.Text
+          className="text-white font-poppins-medium text-base absolute z-[1] opacity-60"
+          style={[doneTextStyle]}
+        >
+          Done!
+        </Animated.Text>
+      </View>
+    </GestureHandlerRootView>
   );
 };
 

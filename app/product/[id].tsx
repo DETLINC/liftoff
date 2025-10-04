@@ -38,6 +38,8 @@ export default function ProductDetail() {
 
   const images = [imageUrl, imageUrl, imageUrl];
 
+  console.log("products...", products);
+
   const renderProduct = ({ item }: { item: ProductAPI }) => (
     <View className="bg-[#2D3748] rounded-2xl p-4 mb-3">
       <View className="flex-row items-center">
@@ -123,6 +125,9 @@ export default function ProductDetail() {
                 </View>
               ) : (
                 <FlatList
+                  contentContainerStyle={{
+                    paddingBottom: 30,
+                  }}
                   data={products}
                   renderItem={renderProduct}
                   keyExtractor={(item) => item.id.toString()}
