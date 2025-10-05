@@ -17,7 +17,7 @@ const ProductContainerLight = ({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      className="w-[165px] h-[215px] opacity-95"
+      className="w-[165px] h-[215px] opacity-95 -mt-7"
     >
       <View className="h-[205px]">
         <View className="absolute">
