@@ -67,9 +67,8 @@ Used slide-from-bottom animation
 
 - Primary: NativeWind (Tailwind CSS)
 - Fallback: Inline style prop for:
-
-Complex shadows (inner shadows)
-Animated styles (Reanimated)
+   Complex shadows (inner shadows)
+   Animated styles (Reanimated)
 
 4. **Icons & Assets**
 
