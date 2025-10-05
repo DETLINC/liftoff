@@ -19,10 +19,12 @@
 2. **Install dependencies**
 
 ```bash   npm install
+```
 
 3. **Start the development server**
 
 ```bash   npx expo start
+```
 
 Run on your IOS device
 
@@ -57,7 +59,7 @@ Used slide-from-bottom animation
 
 - Product images duplicated 3 times to demonstrate carousel:
 
-  ```const images = [imageUrl, imageUrl, imageUrl];
+  ```const images = [imageUrl, imageUrl, imageUrl];```
 
 3. **Styling Approach**
 
@@ -76,7 +78,7 @@ Animated styles (Reanimated)
 
 - API: FakeStore API
 
- ``` https://fakestoreapi.com/products?limit=10
+ ``` https://fakestoreapi.com/products?limit=10```
 
 - Fetched in "Specification" tab
 - Custom hook useFetchProducts
