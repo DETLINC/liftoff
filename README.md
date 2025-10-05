@@ -18,12 +18,14 @@
 
 2. **Install dependencies**
 
-```bash   npm install
+```bash
+ npm install
 ```
 
 3. **Start the development server**
 
-```bash   npx expo start
+```bash
+ npx expo start
 ```
 
 Run on your IOS device
