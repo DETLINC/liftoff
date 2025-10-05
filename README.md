@@ -28,9 +28,9 @@
  npx expo start
 ```
 
-Run on your IOS device
+4. **Run on your IOS device**
 
-Press i for iOS Simulator
+- Press i for iOS Simulator
 
 
 **Testing on Different Screen Sizes**
