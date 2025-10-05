@@ -88,6 +88,5 @@ Used slide-from-bottom animation
 
 - Cart uses React Context API
 - Includes: add, remove, update quantity, calculate totals
-- Context includes: add, remove, update quantity, calculate totals
 
 
