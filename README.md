@@ -14,6 +14,7 @@
 ```bash
    git clone https://github.com/DETLINC/liftoff.git
    cd liftoff
+```
 
 2. **Install dependencies**
 
